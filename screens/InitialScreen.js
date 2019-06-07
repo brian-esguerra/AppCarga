@@ -24,42 +24,35 @@ class HomeScreen extends React.Component {
             <View style={[styles.box, styles.box2]}>
               <View style={styles.div_login}>
                 <Avatar
-                  size="xlarge"
                   rounded
-                  title="DK"
-                  onPress={() => console.log("Works!")}
-                  activeOpacity={0.7}
+                  source={require('../assets/images/logo-home1.png')}
+                  size="xlarge"
+                  overlayContainerStyle={{backgroundColor: '#95afc0',padding:8}}
                 />
               </View>
               <View>
-                <Text h4 style={styles.title}>
+                <Text h3 style={styles.title}>
                   CargApp
                 </Text>
               </View>
 
             </View>
             <View style={[styles.box, styles.box3]}>
-              <View style={styles.btn_login}>
-                <Button 
-                  title="Iniciar sesion"
-                  onPress={() => this.props.navigation.push('Navegacion')}
-                />
+              <View style={styles.div}>
+                <TouchableHighlight style={styles.btn_login} onPress={() => this.props.navigation.push('Navegacion')}>
+                  <Text style={styles.text_btn}> Iniciar Sesión </Text>
+                </TouchableHighlight>
               </View>
-              <View style={styles.btn_reg}>
-                 <Button 
-                  title="Registrarse"
-                  type="outline"
-                  onPress={() => this.props.navigation.push('Navegacion')}
-                />
+              <View style={styles.div}>
+                <TouchableHighlight style={styles.btn_reg} onPress={() => this.props.navigation.push('Navegacion')}>
+                  <Text style={styles.text_btn}> Registrase </Text>
+                </TouchableHighlight>
               </View>
             </View>
         </View>
     );
   }
 
-  _viewHome = () => {
-    //
-  };
 
 }
 
@@ -105,17 +98,17 @@ const styles = StyleSheet.create({
   //header
   box1: {
       flex: 4,
-      backgroundColor: '#d2bb4b'
+      backgroundColor: '#f1c40f'
   },
   //content
   box2: {
       flex: 10,
-      backgroundColor: '#d2bb4b'
+      backgroundColor: '#f1c40f'
   },
   //footer
   box3: {
-      flex: 3,
-      backgroundColor: '#d2bb4c',
+      flex: 2.5,
+      backgroundColor: '#f1c40f',
       fontSize: 16
   },
   //logo inicial
@@ -126,22 +119,30 @@ const styles = StyleSheet.create({
   },
   title:{
     marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
+    color: '#130f40',
     textAlign: 'center'
+  },
+  //div botones
+  div:{
+    marginTop: 5,
+    paddingLeft:10,
+    paddingRight:10
   },
   //btn login
   btn_login:{
-    marginTop: 5,
-    paddingLeft:10,
-    paddingRight:10,
-    backgroundColor: '#d2bb4c'
+    alignItems: 'center',
+    backgroundColor: '#95afc0',
+    padding: 10,
+    borderRadius:8
   },
   //btn registrarse
   btn_reg:{
-    marginTop: 10,
-    paddingLeft:10,
-    paddingRight:10,
-    marginBottom:2,
-    backgroundColor: '#d2bb4c'
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+    borderRadius:8
+  },
+  text_btn:{
+    fontSize: 15
   }
 });
