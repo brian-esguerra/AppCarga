@@ -2,17 +2,11 @@ import React from 'react';
 import { Platform, ScrollView, StyleSheet, StatusBar , View, TouchableHighlight, Dimensions, Image} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-import {Card, ListItem,Button, Icon, Divider, Avatar,Text } from 'react-native-elements';
+import { Button, Icon, Divider, Avatar,Text } from 'react-native-elements';
 import { createStackNavigator, createAppContainer } from 'react-navigation'; // Version can be specified in package.json
 
 import AppNavigator from '../navigation/AppNavigator';
-
-var { height } = Dimensions.get('window');
- 
-var box_count = 3;
-var box_height = height / box_count;
-
-
+import LoginForm from '../screens/LoginScreen';
 
 class HomeScreen extends React.Component {
 
@@ -20,26 +14,21 @@ class HomeScreen extends React.Component {
 
     return (
        <View style={styles.container}>
-            <View style={[styles.box, styles.box1]}></View>
-            <View style={[styles.box, styles.box2]}>
-              <View style={styles.div_login}>
+          <View style={styles.logoContainer}>
                 <Avatar
                   rounded
                   source={require('../assets/images/logo-home1.png')}
                   size="xlarge"
                   overlayContainerStyle={{backgroundColor: '#95afc0',padding:8}}
                 />
-              </View>
-              <View>
                 <Text h3 style={styles.title}>
                   CargApp
                 </Text>
-              </View>
+          </View>
 
-            </View>
-            <View style={[styles.box, styles.box3]}>
+            <View style={styles.formContainer}>
               <View style={styles.div}>
-                <TouchableHighlight style={styles.btn_login} onPress={() => this.props.navigation.push('Navegacion')}>
+                <TouchableHighlight style={styles.btn_login} onPress={() => this.props.navigation.push('Login')}>
                   <Text style={styles.text_btn}> Iniciar Sesión </Text>
                 </TouchableHighlight>
               </View>
@@ -64,10 +53,21 @@ const RootStack = createStackNavigator(
     {
         screen: HomeScreen, 
         navigationOptions: {
-        header: null
+          header: null
         },
     },
-    Navegacion: AppNavigator
+    Navegacion: {
+        screen: AppNavigator,
+        navigationOptions: {
+          header: null
+        },  
+    },
+    Login:{
+      screen: LoginForm,
+      navigationOptions: {
+        header: null
+      },
+    } 
   },
   {
     initialRouteName: 'Home',
@@ -90,41 +90,29 @@ export default class InitialScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#f1c40f'
   },
-  box: {
-    height: box_height
-  },
-  //header
-  box1: {
-      flex: 4,
-      backgroundColor: '#f1c40f'
-  },
-  //content
-  box2: {
-      flex: 10,
-      backgroundColor: '#f1c40f'
-  },
-  //footer
-  box3: {
-      flex: 2.5,
-      backgroundColor: '#f1c40f',
-      fontSize: 16
-  },
-  //logo inicial
-  div_login: {
-    alignItems: 'center',
-    marginTop: 40,
-    marginBottom: 20,
+  //
+  logoContainer:{
+    alignItems:'center',
+    flexGrow:1,
+    justifyContent:'center'
   },
   title:{
-    marginBottom: 20,
-    color: '#130f40',
+    marginTop: 10,
+    color: '#fff',
+    width:160,
+    opacity:0.9,
     textAlign: 'center'
+  },
+  formContainer:{
+    marginBottom: 10
   },
   //div botones
   div:{
     marginTop: 5,
+    marginBottom:5,
     paddingLeft:10,
     paddingRight:10
   },
