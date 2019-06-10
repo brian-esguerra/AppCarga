@@ -11,7 +11,7 @@ import * as firebase from 'firebase';
 
 export default class PerfilScreen extends React.Component {
   static navigationOptions = {
-    title: 'Mi Perfil',
+    header: null,
   };
 
   constructor(props){
@@ -49,7 +49,7 @@ export default class PerfilScreen extends React.Component {
 
     let CardSource = FontAwesome; // set FontAwesome as the default icon source
     let icon_name = 'user-circle-o';
-    let icon_color = '#393939';
+    let icon_color = '#95afc0';
      
     if(this.props.is_open){
       CardSource = this.props.src;
@@ -75,10 +75,6 @@ export default class PerfilScreen extends React.Component {
           </Text>
         </View>
 
-        <View>
-          <Divider style={{ backgroundColor: 'blue' }} />
-        </View>
-
         <View style={styles.form}>
           <Text style={styles.text_input}> 
             Correo electrónico </Text>
@@ -88,7 +84,8 @@ export default class PerfilScreen extends React.Component {
             returnKeyType='next'
             keyboardType='email-address'
             onChangeText={(email) => this.setState({email})}
-            placeholderTextColor='rgba(255,255,255,0.7)'
+            value={username}
+            placeholderTextColor='rgba(255,255,255,0.8)'
           />
           <Text style={styles.text_input}>
             Clave </Text>
@@ -104,24 +101,20 @@ export default class PerfilScreen extends React.Component {
             style={styles.input}
             placeholder='teléfono o celular'
             keyboardType='numeric'
-            placeholderTextColor='rgba(255,255,255,0.7)'
+            placeholderTextColor='rgba(255,255,255,0.8)'
           />
         </View>
 
         <View style={styles.div}>
           <TouchableHighlight style={styles.btn_update}>
-            <Text style={styles.text_btn}> Editar Perfil </Text>
+            <Text style={styles.text_btn_update}> Editar Perfil </Text>
           </TouchableHighlight>
         </View>
 
         <View style={styles.div}>
           <TouchableHighlight style={styles.btn_logout} onPress={this.signOut}>
-            <Text style={styles.text_btn}> Cerrar sesión </Text>
+            <Text style={styles.text_btn_logout}> Cerrar sesión </Text>
           </TouchableHighlight>
-        </View>
-
-        <View>
-          <Divider style={{ backgroundColor: 'white' }} />
         </View>
 
       </ScrollView>
@@ -139,23 +132,22 @@ export default class PerfilScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#f1c40f'
+    marginTop: 20,
+    backgroundColor: '#fff'
   }, 
   img: {
     flex: 1,
+    marginTop: 20,
     alignItems: 'center'
   },
   text_user: {
     alignItems: 'center',
-    fontSize: 50,
-    padding: 20,
-    fontWeight: 'bold'
+    padding: 20
   },
 form:{
     paddingLeft:20,
     paddingRight:20,
-    marginBottom:20
+    marginBottom:25
   },
   //titulos input
   text_input:{
@@ -165,7 +157,7 @@ form:{
   //TextInput
   input:{
     height:40,
-    backgroundColor:'rgba(255,255,255,0.2)',
+    backgroundColor:'#95afc070',
     marginBottom:5,
     color:'#fff',
     borderRadius:8,    
@@ -193,4 +185,12 @@ form:{
     padding: 10,
     borderRadius:8
   },
+  text_btn_update:{
+    fontSize:15,
+    color:'#40739e'
+  },
+  text_btn_logout:{
+    fontSize:15,
+    color:'#fff'
+  }
 });

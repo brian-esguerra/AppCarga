@@ -20,6 +20,7 @@ class HomeScreen extends React.Component {
                   rounded
                   source={require('../assets/images/logo-home1.png')}
                   size="xlarge"
+                  onPress={() => this.props.navigation.push('Navegacion')}
                   overlayContainerStyle={{backgroundColor: '#95afc0',padding:8}}
                 />
                 <Text h3 style={styles.title}>

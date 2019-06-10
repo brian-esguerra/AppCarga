@@ -78,7 +78,7 @@ export default class LoginScreen extends React.Component {
                 </TouchableHighlight>
               </View>
               <View style={styles.div}>
-                <TouchableHighlight style={styles.btn_reg} onPress={() => this.props.navigation.push('Home')}>
+                <TouchableHighlight style={styles.btn_reg} onPress={() => this.props.navigation.goBack()}>
                   <Text style={styles.text_btn}> Regresar </Text>
                 </TouchableHighlight>
               </View>

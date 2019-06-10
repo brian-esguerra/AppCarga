@@ -74,8 +74,22 @@ PerfilStact.navigationOptions = {
 
 /* Crear Toolbar de Navegación */
 export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  ServiciosStack,
-  PerfilStact,
-});
+    HomeStack,
+    LinksStack,
+    ServiciosStack,
+    PerfilStact,
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: '#40739e',
+      inactiveTintColor: '#95afc0',
+      labelStyle: {
+        fontSize: 13,
+        },
+        style: {
+          backgroundColor: '#f1c40f',
+          opacity:0.8
+        },
+      },    
+  }
+);
