@@ -7,6 +7,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation'; // 
 
 import AppNavigator from '../navigation/AppNavigator';
 import LoginForm from '../screens/LoginScreen';
+import Registro from '../screens/RegistroScreen';
 
 class HomeScreen extends React.Component {
 
@@ -33,7 +34,7 @@ class HomeScreen extends React.Component {
                 </TouchableHighlight>
               </View>
               <View style={styles.div}>
-                <TouchableHighlight style={styles.btn_reg} onPress={() => this.props.navigation.push('Navegacion')}>
+                <TouchableHighlight style={styles.btn_reg} onPress={() => this.props.navigation.push('Registro')}>
                   <Text style={styles.text_btn}> Registrase </Text>
                 </TouchableHighlight>
               </View>
@@ -67,6 +68,12 @@ const RootStack = createStackNavigator(
       navigationOptions: {
         header: null
       },
+    },
+    Registro:{
+      screen: Registro,
+      navigationOptions:{
+        header: null
+      }
     } 
   },
   {
@@ -131,6 +138,6 @@ const styles = StyleSheet.create({
     borderRadius:8
   },
   text_btn:{
-    fontSize: 15
+    fontSize: 16
   }
 });

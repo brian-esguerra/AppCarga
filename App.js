@@ -1,12 +1,23 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
+
 import InitialScreen from './screens/InitialScreen';
+import AppNavigator from './navigation/AppNavigator';
+
+import * as firebase from 'firebase';
+import Firebase from './lib/firebase';
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
+  constructor(props){
+    super(props)
+    Firebase.init()
+
+    this.state = {
+      isLoadingComplete: false
+    };  
+  }
+  
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -18,12 +29,29 @@ export default class App extends React.Component {
         />
       );
     } else {
-      return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            <InitialScreen />
-        </View>
-      );
+
+      user = firebase.auth().currentUser;
+      let username = 'undefined';
+
+      if (user) {
+        // User is signed in.
+        return (
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              <AppNavigator />
+          </View>
+        );
+      } else {
+        // No user is signed in.
+        return (
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              <InitialScreen />
+          </View>
+        );
+      }
+
+      
     }
   }
 

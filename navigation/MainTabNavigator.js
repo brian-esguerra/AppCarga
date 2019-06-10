@@ -10,7 +10,7 @@ import PerfilScreen from '../screens/PerfilScreen';
 import ServiciosScreen from '../screens/ServiciosScreen';
 
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  HomeNav: HomeScreen,
 });
 
 HomeStack.navigationOptions = {
