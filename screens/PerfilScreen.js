@@ -34,13 +34,13 @@ export default class PerfilScreen extends React.Component {
     this.updateUserData = this.updateUserData.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount(){
     this.setState({ loading: true });
     this.getUserData();
   }
 
   /* Cerrar sesión */
-  async signOut() {
+  async signOut(){
     try{
       await firebase.auth().signOut()
       this.props.navigation.push('Home')

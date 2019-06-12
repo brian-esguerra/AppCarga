@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
+import { Card, ListItem, Button, Icon, Tile } from 'react-native-elements'
+
 import { MonoText } from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
@@ -18,22 +20,54 @@ export default class HomeScreen extends React.Component {
   };
 
   render() {
+
+    const list = [
+  {
+    title: 'Buscar ofertas',
+    icon: 'pageview'
+  },
+  {
+    title: 'Aplicar a las nuevas ofertas',
+    icon: 'check-circle'
+  },
+  {
+    title: 'Ver el estado de mis servicios',
+    icon: 'history'
+  },
+]
+
     return (
       <View style={styles.container}>
          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+
+          <Tile
+            imageSrc={require('../assets/images/img-1.jpg')}
+            title="Bienvenido,"
+            featured
+            caption="Encuentra las mejores ofertas"
+            contentContainerStyle={{ height: 70 }}
+          />
+
+          <View style={styles.div_list}>
+          <Text style={styles.getStartedText}>
+            La herramienta te permitira:
+          </Text>
+            {
+              list.map((item, i) => (
+                <ListItem
+                  key={i}
+                  style={styles.item}
+                  title={item.title}
+                  leftIcon={{ name: item.icon }}
+                />
+              ))
+            }
           </View>
 
-          <View style={styles.getStartedContainer}>
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-            <MonoText style={styles.getStartedText}>
-              Bienvenido,
-            </MonoText>
-          </View>
         </ScrollView>
 
         <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>Actualiza todo tu información</Text>
+          <Text style={styles.tabBarInfoText}>Actualiza toda tu información</Text>
         </View>
       </View>
     );
@@ -88,5 +122,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
+  },
+  div_list:{
+    marginTop:20
+  },
+  item: {
+    backgroundColor:'#95afc0',
+    borderBottomColor:'#95afc0',
+    borderBottomWidth:1
   },
 });

@@ -10,58 +10,100 @@ import {
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
-
 import { MonoText } from '../components/StyledText';
+
+import * as firebase from 'firebase';
+import ignoreWarnings from 'react-native-ignore-warnings';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
+  constructor(props){
+    super(props)
+    this.state = {
+      uid:'',
+      response:'',
+      listOferts:[],
+      loading: false
+    }
+
+    this.addnewOfert = this.addnewOfert.bind(this)
+
+  };
+
+  componentDidMount() {
+    this.setState({ loading: true });
+    this.getOferts();
+    //this.addOfert();
+  }
+
+
+  /* Obtener info del usuario*/
+  getOferts = () => {
+    ignoreWarnings('Setting a timer');
+    user = firebase.auth().currentUser;
+    let uid       = 'undefined';
+    let username  = 'undefined';
+    let listint = [];
+    if (user) {
+      // User is signed in.
+      username = user.email;
+      uid = user.uid
+      //obtener data - Oferts
+        this.setState({ listOferts: [] })
+        firebase.database().ref('Oferts/').orderByChild('valor').on('value', snapshot => {
+          snapshot.forEach(c => { 
+            i = c.val();
+            this.setState(prevState => ({
+              listOferts: [...prevState.listOferts, 
+                {
+                  "name": 'Origen: '+i.origen+'\nDestino: '+i.destino+'\n\nGanancia: $'+i.valor,
+                  "avatar_url": i.avatar_url,
+                  "subtitle": 'fecha carga: '+i.fecha_carga+'\nfecha publicación: '+i.fecha_publicacion
+              }
+              ]
+            }))
+          })
+      })
+    } else {
+      // No user is signed in.
+      username ='user undefined';
+    }
+  }
+
+  async addnewOfert() {
+
+    try{
+      ignoreWarnings('Setting a timer');
+      user = firebase.auth().currentUser;
+      firebase.database().ref('OfertsUsers/').push({
+          key:'12349013242',
+          key_ofert:'-',
+          key_user:user.uid,
+          status:'Pendiente',
+          fecha_solicitud:'12/6/2019'
+      }).then((data)=>{
+          //success callback
+          alert('Oferta solicitada')
+          console.log('data ' , data)
+      }).catch((error)=>{
+          //error callback
+          console.log('error ' , error)
+      })
+    }catch(error){
+      this.setState({
+        response: error.toString()
+      })
+    }
+
+
+  }
+
   render() {
 
-    const list = [
-      {
-        name: 'Amy Farha',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
-      },
-      {
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-      },
-      {
-        name: 'Amy Farha',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
-      },
-      {
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-      },
-      {
-        name: 'Amy Farha',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
-      },
-      {
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-      },
-      {
-        name: 'Amy Farha',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
-      },
-      {
-        name: 'Chris Jackson',
-        avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
-      },
-    ]
+    const listOf =this.state.listOferts;
 
     return (
       <View style={styles.container}>
@@ -78,14 +120,14 @@ export default class LinksScreen extends React.Component {
 
           <View style={styles.div_list}>
             {
-              list.map((l, i) => {
+              listOf.map((l, i) => {
                 return (
                   <ListItem
                     style={styles.item}
                     key={i}
-                    leftAvatar={{ source: { uri: l.avatar_url } }}
                     rightIcon={{ name: 'gps-fixed' }}
                     title={l.name}
+                    onPress={this.addnewOfert}
                     subtitle={l.subtitle}
                   />
                 );
@@ -98,9 +140,6 @@ export default class LinksScreen extends React.Component {
 
         </ScrollView>
 
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>Actualiza todo tu información</Text>
-        </View>
       </View>
     );
   }
