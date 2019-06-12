@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import * as firebase from 'firebase';
+import ignoreWarnings from 'react-native-ignore-warnings';
 
 export default class PerfilScreen extends React.Component {
   static navigationOptions = {
@@ -17,14 +18,28 @@ export default class PerfilScreen extends React.Component {
   constructor(props){
     super(props)
     this.state = {
+      uid:'',
       email:'',
       password:'',
-      response:''
+      name:'',
+      document:'',
+      phone:'',
+      plate:'',
+      typeAuto:'',
+      response:'',
+      loading: false
     }
 
     this.signOut = this.signOut.bind(this)
+    this.updateUserData = this.updateUserData.bind(this)
   }
 
+  componentDidMount() {
+    this.setState({ loading: true });
+    this.getUserData();
+  }
+
+  /* Cerrar sesión */
   async signOut() {
     try{
       await firebase.auth().signOut()
@@ -34,18 +49,71 @@ export default class PerfilScreen extends React.Component {
     }
   }
 
-  render() {
-
+  /* Obtener info del usuario*/
+  getUserData = () => {
+    ignoreWarnings('Setting a timer');
     user = firebase.auth().currentUser;
-    let username = 'undefined';
-
+    let uid       = 'undefined';
+    let username  = 'undefined';
     if (user) {
       // User is signed in.
       username = user.email;
+      uid = user.uid
+      //obtener data - User
+        const ref = firebase.database().ref('Users/' + uid)
+
+        ref.once('value', (snapshot) => {
+            const userdata = snapshot.val()
+            this.setState({ name : userdata.name })
+            this.setState({ email : userdata.email })
+            this.setState({ document : userdata.document })
+            this.setState({ phone : userdata.phone })
+            this.setState({ plate : userdata.plate })
+            this.setState({ typeAuto : userdata.typeAuto })
+
+            this.setState({ loading: false })
+        }, (error) => {
+            console.log(error)
+        })
     } else {
       // No user is signed in.
       username ='user undefined';
     }
+  }
+
+  /* Update info del usuario */
+
+  async updateUserData() {
+    try {
+      ignoreWarnings('Setting a timer');
+
+      user = firebase.auth().currentUser;
+      let uid = user.uid;
+      //Registrar info en Bd
+      firebase.database().ref('Users/'+uid).set({
+          name: this.state.name,
+          document: this.state.document,
+          phone: this.state.phone,
+          plate: this.state.plate,
+          typeAuto: this.state.typeAuto
+      }).then((data)=>{
+          //success callback
+          alert('Datos actualizados')
+      }).catch((error)=>{
+          //error callback
+          console.log('error ' , error)
+          alert('Error: No se actualizo los datos')
+      });
+
+    }
+    catch(error){
+      this.setState({
+        response: error.toString()
+      })
+    }
+  }
+
+  render() {
 
     let CardSource = FontAwesome; // set FontAwesome as the default icon source
     let icon_name = 'user-circle-o';
@@ -57,13 +125,17 @@ export default class PerfilScreen extends React.Component {
       icon_color = this.props.color;
     }
 
+    const { loading } = this.state;
+
     return (
+      //{loading && <div>Loading ...</div>}
+
       <ScrollView style={styles.container}>
         <View style={styles.img}>
           <TouchableHighlight onPress={this.props.clickCard} activeOpacity={0.75} underlayColor={"#f1f1f1"}>
             <CardSource 
               name={icon_name} 
-              size={100} 
+              size={60} 
               color={icon_color} 
             />
           </TouchableHighlight>
@@ -71,42 +143,77 @@ export default class PerfilScreen extends React.Component {
 
         <View style={styles.text_user}>
           <Text> 
-            {username}
+            {this.state.email}
           </Text>
         </View>
 
         <View style={styles.form}>
+
+          <Divider style={styles.divider}></Divider>
+
+          <Text style={styles.text_input}>
+            Nombre:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder='nombre completo'
+            returnKeyType='next'
+            value={this.state.name}
+            onChangeText={(name) => this.setState({name})}
+            placeholderTextColor='rgba(255,255,255,0.9)'
+          />
+
           <Text style={styles.text_input}> 
-            Correo electrónico </Text>
-          <TextInput
+            No. Cédula:</Text>
+          <TextInput 
             style={styles.input}
-            placeholder='username o email'
+            placeholder='no. cédula'
             returnKeyType='next'
-            keyboardType='email-address'
-            onChangeText={(email) => this.setState({email})}
-            value={username}
-            placeholderTextColor='rgba(255,255,255,0.8)'
+            keyboardType='numeric'
+            value={this.state.document}
+            maxLength={12}
+            onChangeText={(document) => this.setState({document})}
+            placeholderTextColor='rgba(255,255,255,0.9)'
           />
+
           <Text style={styles.text_input}>
-            Clave </Text>
-          <TextInput
-            style={styles.input}
-            returnKeyType='next'
-            onChangeText={(password) => this.setState({password})}
-            secureTextEntry
-          />
-          <Text style={styles.text_input}>
-            Teléfono </Text>
+            Celular </Text>
           <TextInput
             style={styles.input}
             placeholder='teléfono o celular'
             keyboardType='numeric'
-            placeholderTextColor='rgba(255,255,255,0.8)'
+            value={this.state.phone}
+            placeholderTextColor='rgba(255,255,255,0.9)'
           />
+
+          <Divider style={styles.divider}></Divider>
+
+          <Text style={styles.text_input}>
+            Placa Vehículo:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder='no. placa'
+            returnKeyType='next'
+            maxLength={6}
+            value={this.state.plate}
+            onChangeText={(plate) => this.setState({plate})}
+            placeholderTextColor='rgba(255,255,255,0.9)'
+          />
+
+          <Text style={styles.text_input}>
+            Tipo de Vehículo:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder='camioneta, turbo, sencillo, mula'
+            maxLength={15}
+            value={this.state.typeAuto}
+            onChangeText={(typeAuto) => this.setState({typeAuto})}
+            placeholderTextColor='rgba(255,255,255,0.9)'
+          />
+
         </View>
 
         <View style={styles.div}>
-          <TouchableHighlight style={styles.btn_update}>
+          <TouchableHighlight style={styles.btn_update} onPress={this.updateUserData}>
             <Text style={styles.text_btn_update}> Editar Perfil </Text>
           </TouchableHighlight>
         </View>

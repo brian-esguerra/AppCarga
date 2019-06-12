@@ -36,8 +36,10 @@ export default class RegistroScreen extends React.Component {
         response: 'Usuario registrado correctamente'
       })
 
+      user = firebase.auth().currentUser;
+      let uid = user.uid;
       //Registrar info en Bd
-      firebase.database().ref('Users/').push({
+      firebase.database().ref('Users/'+uid).set({
           email: this.state.email,
           name: this.state.name,
           document: this.state.document,
