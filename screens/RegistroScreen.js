@@ -48,6 +48,7 @@ export default class RegistroScreen extends React.Component {
           typeAuto: this.state.typeAuto
       }).then((data)=>{
           //success callback
+          console.log('user create')
           this.props.navigation.push('Navegacion')
       }).catch((error)=>{
           //error callback

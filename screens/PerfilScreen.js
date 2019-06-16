@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, TextInput,TouchableHighlight } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TextInput,TouchableHighlight,ActivityIndicator } from 'react-native';
 import { Button, Input, Divider } from 'react-native-elements';
 
 import { ExpoLinksView } from '@expo/samples';
@@ -27,7 +27,7 @@ export default class PerfilScreen extends React.Component {
       plate:'',
       typeAuto:'',
       response:'',
-      loading: false
+      loading: true
     }
 
     this.signOut = this.signOut.bind(this)
@@ -35,7 +35,6 @@ export default class PerfilScreen extends React.Component {
   }
 
   componentDidMount(){
-    this.setState({ loading: true });
     this.getUserData();
   }
 
@@ -125,105 +124,110 @@ export default class PerfilScreen extends React.Component {
       icon_color = this.props.color;
     }
 
-    const { loading } = this.state;
 
     return (
-      //{loading && <div>Loading ...</div>}
+      <ScrollView >
+        <View>
+        { this.state.loading ? 
+            <View style={[styles.containerInd, styles.horizontal]}>
+              <ActivityIndicator size="large" color="#f1c40f" /> 
+            </View>  : 
+  
+          <View style={styles.container}>
+            <View style={styles.img}>
+              <TouchableHighlight onPress={this.props.clickCard} activeOpacity={0.75} underlayColor={"#f1f1f1"}>
+                <CardSource 
+                  name={icon_name} 
+                  size={60} 
+                  color={icon_color} 
+                />
+              </TouchableHighlight>
+            </View>
 
-      <ScrollView style={styles.container}>
-        <View style={styles.img}>
-          <TouchableHighlight onPress={this.props.clickCard} activeOpacity={0.75} underlayColor={"#f1f1f1"}>
-            <CardSource 
-              name={icon_name} 
-              size={60} 
-              color={icon_color} 
-            />
-          </TouchableHighlight>
+            <View style={styles.text_user}>
+              <Text> 
+                {this.state.email}
+              </Text>
+            </View>
+
+            <View style={styles.form}>
+              <Text style={styles.text_input}>
+                Nombre:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder='nombre completo'
+                returnKeyType='next'
+                value={this.state.name}
+                onChangeText={(name) => this.setState({name})}
+                placeholderTextColor='rgba(255,255,255,0.9)'
+              />
+
+              <Text style={styles.text_input}> 
+                No. Cédula:</Text>
+              <TextInput 
+                style={styles.input}
+                placeholder='no. cédula'
+                returnKeyType='next'
+                keyboardType='numeric'
+                value={this.state.document}
+                maxLength={12}
+                onChangeText={(document) => this.setState({document})}
+                placeholderTextColor='rgba(255,255,255,0.9)'
+              />
+
+              <Text style={styles.text_input}>
+                Celular </Text>
+              <TextInput
+                style={styles.input}
+                placeholder='teléfono o celular'
+                keyboardType='numeric'
+                value={this.state.phone}
+                placeholderTextColor='rgba(255,255,255,0.9)'
+              />
+
+              <Divider style={styles.divider}></Divider>
+
+              <Text style={styles.text_input}>
+                Placa Vehículo:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder='no. placa'
+                returnKeyType='next'
+                maxLength={6}
+                value={this.state.plate}
+                onChangeText={(plate) => this.setState({plate})}
+                placeholderTextColor='rgba(255,255,255,0.9)'
+              />
+
+              <Text style={styles.text_input}>
+                Tipo de Vehículo:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder='camioneta, turbo, sencillo, mula'
+                maxLength={15}
+                value={this.state.typeAuto}
+                onChangeText={(typeAuto) => this.setState({typeAuto})}
+                placeholderTextColor='rgba(255,255,255,0.9)'
+              />
+
+            </View>
+
+            <View style={styles.div}>
+              <TouchableHighlight style={styles.btn_update} onPress={this.updateUserData}>
+                <Text style={styles.text_btn_update}> Editar Perfil </Text>
+              </TouchableHighlight>
+            </View>
+
+            <View style={styles.div}>
+              <TouchableHighlight style={styles.btn_logout} onPress={this.signOut}>
+                <Text style={styles.text_btn_logout}> Cerrar sesión </Text>
+              </TouchableHighlight>
+            </View>
+
+          </View>
+
+          }
         </View>
-
-        <View style={styles.text_user}>
-          <Text> 
-            {this.state.email}
-          </Text>
-        </View>
-
-        <View style={styles.form}>
-
-          <Divider style={styles.divider}></Divider>
-
-          <Text style={styles.text_input}>
-            Nombre:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder='nombre completo'
-            returnKeyType='next'
-            value={this.state.name}
-            onChangeText={(name) => this.setState({name})}
-            placeholderTextColor='rgba(255,255,255,0.9)'
-          />
-
-          <Text style={styles.text_input}> 
-            No. Cédula:</Text>
-          <TextInput 
-            style={styles.input}
-            placeholder='no. cédula'
-            returnKeyType='next'
-            keyboardType='numeric'
-            value={this.state.document}
-            maxLength={12}
-            onChangeText={(document) => this.setState({document})}
-            placeholderTextColor='rgba(255,255,255,0.9)'
-          />
-
-          <Text style={styles.text_input}>
-            Celular </Text>
-          <TextInput
-            style={styles.input}
-            placeholder='teléfono o celular'
-            keyboardType='numeric'
-            value={this.state.phone}
-            placeholderTextColor='rgba(255,255,255,0.9)'
-          />
-
-          <Divider style={styles.divider}></Divider>
-
-          <Text style={styles.text_input}>
-            Placa Vehículo:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder='no. placa'
-            returnKeyType='next'
-            maxLength={6}
-            value={this.state.plate}
-            onChangeText={(plate) => this.setState({plate})}
-            placeholderTextColor='rgba(255,255,255,0.9)'
-          />
-
-          <Text style={styles.text_input}>
-            Tipo de Vehículo:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder='camioneta, turbo, sencillo, mula'
-            maxLength={15}
-            value={this.state.typeAuto}
-            onChangeText={(typeAuto) => this.setState({typeAuto})}
-            placeholderTextColor='rgba(255,255,255,0.9)'
-          />
-
-        </View>
-
-        <View style={styles.div}>
-          <TouchableHighlight style={styles.btn_update} onPress={this.updateUserData}>
-            <Text style={styles.text_btn_update}> Editar Perfil </Text>
-          </TouchableHighlight>
-        </View>
-
-        <View style={styles.div}>
-          <TouchableHighlight style={styles.btn_logout} onPress={this.signOut}>
-            <Text style={styles.text_btn_logout}> Cerrar sesión </Text>
-          </TouchableHighlight>
-        </View>
-
       </ScrollView>
     );
   }
@@ -242,6 +246,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: '#fff'
   }, 
+  containerInd: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  horizontal: {
+    justifyContent: 'center',
+    padding: 10
+  },
   img: {
     flex: 1,
     marginTop: 20,

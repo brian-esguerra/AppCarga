@@ -7,10 +7,10 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
-import { MonoText } from '../components/StyledText';
 
 import * as firebase from 'firebase';
 import ignoreWarnings from 'react-native-ignore-warnings';
@@ -26,7 +26,7 @@ export default class LinksScreen extends React.Component {
       uid:'',
       response:'',
       listOferts:[],
-      loading: false
+      loading: true
     }
 
     this.addnewOfert = this.addnewOfert.bind(this)
@@ -34,13 +34,12 @@ export default class LinksScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({ loading: true });
     this.getOferts();
     //this.addOfert();
   }
 
 
-  /* Obtener info del usuario*/
+  /* Obtener info de Ofertas*/
   getOferts = () => {
     ignoreWarnings('Setting a timer');
     user = firebase.auth().currentUser;
@@ -61,11 +60,13 @@ export default class LinksScreen extends React.Component {
                 {
                   "name": 'Origen: '+i.origen+'\nDestino: '+i.destino+'\n\nGanancia: $'+i.valor,
                   "avatar_url": i.avatar_url,
+                  "key": c.key,
                   "subtitle": 'fecha carga: '+i.fecha_carga+'\nfecha publicación: '+i.fecha_publicacion
               }
               ]
             }))
           })
+          this.setState({ loading: false });
       })
     } else {
       // No user is signed in.
@@ -73,17 +74,17 @@ export default class LinksScreen extends React.Component {
     }
   }
 
-  async addnewOfert() {
+  async addnewOfert(idItem) {
 
     try{
       ignoreWarnings('Setting a timer');
       user = firebase.auth().currentUser;
       firebase.database().ref('OfertsUsers/').push({
           key:'12349013242',
-          key_ofert:'-',
+          key_ofert:idItem,
           key_user:user.uid,
           status:'Pendiente',
-          fecha_solicitud:'12/6/2019'
+          fecha_solicitud:'15/6/2019'
       }).then((data)=>{
           //success callback
           alert('Oferta solicitada')
@@ -106,6 +107,7 @@ export default class LinksScreen extends React.Component {
     const listOf =this.state.listOferts;
 
     return (
+
       <View style={styles.container}>
          <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
@@ -118,25 +120,31 @@ export default class LinksScreen extends React.Component {
             </Text>
           </View>
 
-          <View style={styles.div_list}>
-            {
-              listOf.map((l, i) => {
-                return (
-                  <ListItem
-                    style={styles.item}
-                    key={i}
-                    rightIcon={{ name: 'gps-fixed' }}
-                    title={l.name}
-                    onPress={this.addnewOfert}
-                    subtitle={l.subtitle}
-                  />
-                );
+          { this.state.loading ? 
+            <View style={[styles.containerInd, styles.horizontal]}>
+              <ActivityIndicator size="large" color="#f1c40f" /> 
+            </View>  : 
+
+            <View style={styles.div_list}>
+              {
+                listOf.map((l, i) => {
+                  return (
+                    <ListItem
+                      style={styles.item}
+                      key={i}
+                      rightIcon={{ name: 'gps-fixed' }}
+                      title={l.name}
+                      onPress={() => {this.addnewOfert(l.key)} }
+                      subtitle={l.subtitle}
+                    />
+                  );
 
 
-              })
-            }
+                })
+              }
 
-          </View>
+            </View>
+          }
 
         </ScrollView>
 
@@ -153,6 +161,15 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
+  },
+  containerInd: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  horizontal: {
+    justifyContent: 'center',
+    marginTop:30
   },
   welcomeContainer: {
     alignItems: 'center',

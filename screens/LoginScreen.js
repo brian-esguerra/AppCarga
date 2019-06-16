@@ -39,6 +39,7 @@ export default class LoginScreen extends React.Component {
         response: error.toString()
       })
       console.log(error.toString())
+      alert(error.toString())
     }
   }
 
