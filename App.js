@@ -5,6 +5,8 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import InitialScreen from './screens/InitialScreen';
 import AppNavigator from './navigation/AppNavigator';
 
+import HomeNavigation from './navigationBar/HomeNavigation';
+
 import * as firebase from 'firebase';
 import Firebase from './lib/firebase';
 
@@ -46,7 +48,7 @@ export default class App extends React.Component {
         return (
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-              <InitialScreen />
+              <HomeNavigation />
           </View>
         );
       }
