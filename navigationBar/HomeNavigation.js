@@ -4,22 +4,20 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import PremiosPage from './pages/PremiosPage';
 import DetallePage from './pages/DetallePage';
+import ViewPage from './pages/ViewPage';
  
 //Menu navegación
 const App = createStackNavigator(
   {
     Home: 
     {
-        screen: PremiosPage, 
-        /*navigationOptions: {
-          header: null
-        },*/
+        screen: PremiosPage
     },
     Detalle: {
-        screen: DetallePage,
-        /*navigationOptions: {
-          header: null
-        },*/  
+        screen: DetallePage
+    },
+    View: {
+        screen: ViewPage
     },
   },
   {

@@ -6,7 +6,7 @@ import { Card, ListItem, Button} from 'react-native-elements'
 import { Icon } from 'expo';
  
 export default class PremiosPage extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation, screenProps }) => ({
     //To set the header image and title for the current Screen
     title: 'Premios',
     headerLeft: (
@@ -17,17 +17,19 @@ export default class PremiosPage extends Component {
       />
     ),
     headerRight: (
-      <Icon.Ionicons
-        name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications"}
-        size={26}
-        style={{ paddingRight: 15}}
-      />
+      <TouchableHighlight onPress={() => navigation.push('View')}>
+        <Icon.Ionicons
+          name={Platform.OS === "ios" ? "ios-notifications" : "md-notifications"}
+          size={26}
+          style={{ paddingRight: 15}}
+        />
+      </TouchableHighlight>
     ),
     headerStyle: {
       backgroundColor: '#fff',
     },
     headerTintColor: '#000000',
-  };
+  });
  
   render() {
     return (
@@ -35,9 +37,20 @@ export default class PremiosPage extends Component {
         <View style={styles.MainContainer}>
            
           <View style={styles.divBtn}>
-              <TouchableHighlight style={styles.btn_logout} onPress={this.openAlert}>
-                  <Text style={styles.text_btn_logout}> Hogar </Text>
+            <ScrollView horizontal={true} style={styles.container} contentContainerStyle={{height:50}}>
+              <TouchableHighlight style={styles.btn} onPress={this.openAlert}>
+                  <Text style={styles.text_btn}> Hogar </Text>
                 </TouchableHighlight>
+                <TouchableHighlight style={styles.btn} onPress={this.openAlert}>
+                  <Text style={styles.text_btn}> Mujer </Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.btn} onPress={this.openAlert}>
+                  <Text style={styles.text_btn}> Hombre </Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.btn} onPress={this.openAlert}>
+                  <Text style={styles.text_btn}> Niños </Text>
+                </TouchableHighlight>
+            </ScrollView>
           </View>
 
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -88,7 +101,6 @@ export default class PremiosPage extends Component {
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    padding: 15,
     backgroundColor: '#e5ecf5',
   },
   container: {
@@ -98,25 +110,50 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   contentContainer: {
-    paddingTop: 5,
+    paddingLeft: 15,
+    paddingRight:15
   },
   div_seccion:{
     paddingTop:10
   },
   div_imagen:{
-    height: 200,
+    height: 180,
     position: 'relative', // because it's parent
     top: 2,
     left: 2
   },
   txt_imagen:{
     fontWeight: 'bold',
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 19,
+    lineHeight: 25,
     width:100,
     color: 'white',
     position: 'absolute', // child
     top: 45, // position where you want
     left: 15
-  }
+  },
+  divBtn:{
+    flexDirection: 'row',
+    paddingLeft: 5,
+    paddingTop:12
+  },
+  //btn
+  btn:{
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    padding: 10,
+    width:90,
+    height:45,
+    marginLeft:6,
+    marginRight:6,
+    borderRadius:20,
+    borderWidth:1,
+    borderColor:'#ccc'
+  },
+  text_btn:{
+    fontSize:16,
+    fontWeight: '500',
+    color:'#000000'
+  },
 });

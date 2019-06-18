@@ -7,29 +7,30 @@ import { Icon } from 'expo';
 import SegmentedControlTab from 'react-native-segmented-control-tab'
  
 export default class DetallePage extends Component {
-  static navigationOptions = {
-    //To set the header image and title for the current Screen
-    title: 'Detalle',
-    headerLeft: (
-      <Icon.Ionicons
-        name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
-        size={26}
-        style={{ paddingLeft: 15}}
-      />
-    ),
-    headerStyle: {
-      backgroundColor: '#fff',
-    },
-    headerTintColor: '#000000',
-  };
-
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       selectedIndex: 0,
       customStyleIndex: 0,
     };
   }
+  static navigationOptions = ({ navigation, screenProps }) => ({
+    //To set the header image and title for the current Screen
+    title: 'Detalle',
+    headerLeft: (
+      <TouchableHighlight onPress={() => navigation.goBack()}>
+          <Icon.Ionicons
+            name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+            size={26}
+            style={{ paddingLeft: 15}}
+          />
+        </TouchableHighlight>
+    ),
+    headerStyle: {
+      backgroundColor: '#fff',
+    },
+    headerTintColor: '#000000',
+  });
 
   handleIndexChange = (index) => {
     this.setState({
